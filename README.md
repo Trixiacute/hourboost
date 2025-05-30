@@ -54,6 +54,7 @@ Edit the `config.json` file with your Steam account details:
       "games": [730, 440, 570],  // Example game IDs (CS:GO, TF2, Dota 2)
       "status": "online",
       "autoReply": "I'm currently AFK. This is an automated response.",
+      "autoReplyDelay": 5,
       "customPlayingStatus": "✨ Playing My Favorite Game ✨"
     },
     {
@@ -62,6 +63,7 @@ Edit the `config.json` file with your Steam account details:
       "games": [730, 440, 570],
       "status": "online",
       "autoReply": "AFK at the moment. Will respond later.",
+      "autoReplyDelay": 2,
       "customPlayingStatus": "🎮 Gaming Time 🎮"
     }
   ],
@@ -69,6 +71,7 @@ Edit the `config.json` file with your Steam account details:
     "logLevel": "info",
     "playingMessage": "Steam Hour Booster",
     "defaultAutoReply": "I'm currently away. I'll respond to your message later.",
+    "autoReplyDelay": 3,
     "customPlayingStatus": "🎮 Gaming Time 🎮"
   }
 }
@@ -99,6 +102,26 @@ You can set a custom "Now Playing" status instead of showing the actual game nam
 - Your hours in the specified games will continue to increase
 - When not using custom status, your profile will show the actual game names
 
+## Anti-VAC Feature
+
+The application includes safety measures to prevent potential VAC (Valve Anti-Cheat) issues:
+
+- **Game Limiting**: Automatically limits the number of games boosted simultaneously to a safe number
+- **Safe Games**: Defines games known to be safe for simultaneous boosting
+- **VAC Protection**: Prevents running multiple VAC-enabled games at the same time, which could trigger anti-cheat systems
+
+Configure these settings in the `config.json` file:
+
+```json
+"antiVAC": {
+  "enabled": true,
+  "maxGamesPerAccount": 15,
+  "safeGames": [730, 570, 440],
+  "riskySources": ["unknown", "non-steam"],
+  "preventMultipleVACGames": true
+}
+```
+
 ## Steam Guard Authentication
 
 The application supports Steam Guard authentication:
@@ -111,6 +134,13 @@ The application supports Steam Guard authentication:
 ## Auto-Reply Feature
 
 The application automatically responds to any Steam chat messages you receive while the booster is running. You can customize the auto-reply message for each account or set a default message for all accounts.
+
+### Auto-Reply Delay
+
+You can set a delay before sending auto-reply messages to make them appear more natural:
+- Set `autoReplyDelay` for each account (in seconds) to customize the delay per account
+- Or set a global `autoReplyDelay` in the settings section that will apply to all accounts without a specific delay
+- Default delay is 3 seconds if not specified
 
 ## Deployment on Pterodactyl
 

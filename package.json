@@ -1,19 +1,22 @@
 {
   "name": "steam-hour-booster",
   "version": "1.0.0",
-  "description": "A Steam hour boosting application for Pterodactyl",
+  "description": "Boost your Steam hours while showing custom status",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "npm install steam-user winston"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "steam-user": "^4.29.1",
-    "winston": "^3.10.0"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
+  "keywords": [
+    "steam",
+    "boost",
+    "hours",
+    "gaming"
+  ],
   "author": "",
-  "license": "MIT"
-} 
+  "license": "ISC",
+  "dependencies": {
+    "steam-user": "^4.28.5",
+    "winston": "^3.8.2"
+  }
+}

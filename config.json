@@ -6,6 +6,7 @@
       "games": [730, 244210, 570],
       "status": "online",
       "autoReply": "Hello, I'm busy right now. Please leave a message and I'll get back to you soon. 🖤",
+      "autoReplyDelay": 60,
       "customPlayingStatus": "Jung Eunbi & Rei Supremacy!",
       "enabled": true
     },
@@ -15,6 +16,7 @@
       "games": [730, 440, 570],
       "status": "online",
       "autoReply": "Saya sedang AFK. Mohon tinggalkan pesan.",
+      "autoReplyDelay": 2,
       "customPlayingStatus": "🎮 Gaming Time 🎮",
       "enabled": false
     }
@@ -23,6 +25,17 @@
     "logLevel": "info",
     "playingMessage": "Steam Hour Booster",
     "defaultAutoReply": "Saya sedang tidak di tempat. Pesan Anda akan saya balas nanti.",
-    "customPlayingStatus": "🎮 Gaming Time 🎮"
+    "autoReplyDelay": 3,
+    "customPlayingStatus": "🎮 Gaming Time 🎮",
+    "antiVAC": {
+      "enabled": true,
+      "maxGamesPerAccount": 15,
+      "safeGames": [730, 570, 440],
+      "riskySources": [
+        "unknown",
+        "non-steam"
+      ],
+      "preventMultipleVACGames": true
+    }
   }
 } 

@@ -157,9 +157,39 @@ function processAccounts() {
     
     // Start playing games with custom status (if enabled)
     if (account.games && Array.isArray(account.games) && account.games.length > 0) {
+      // Apply Anti-VAC measures if enabled
+      let gamesToBoost = [...account.games]; // Create a copy of the games array
+      
+      if (config.settings && config.settings.antiVAC && config.settings.antiVAC.enabled) {
+        const antiVACSettings = config.settings.antiVAC;
+        
+        // Limit the number of games to boost simultaneously
+        if (antiVACSettings.maxGamesPerAccount && gamesToBoost.length > antiVACSettings.maxGamesPerAccount) {
+          logger.warn(`Account ${account.username} has ${gamesToBoost.length} games configured, but Anti-VAC limits to ${antiVACSettings.maxGamesPerAccount} games. Trimming list.`);
+          gamesToBoost = gamesToBoost.slice(0, antiVACSettings.maxGamesPerAccount);
+        }
+        
+        // Filter out risky games if preventMultipleVACGames is enabled
+        if (antiVACSettings.preventMultipleVACGames && antiVACSettings.safeGames) {
+          const vacGames = gamesToBoost.filter(game => !antiVACSettings.safeGames.includes(game));
+          
+          if (vacGames.length > 1) {
+            logger.warn(`Multiple potential VAC games detected for ${account.username}. Keeping only one VAC game to prevent issues.`);
+            
+            // Keep all safe games and only one VAC game (the first one)
+            const safeGames = gamesToBoost.filter(game => antiVACSettings.safeGames.includes(game));
+            if (vacGames.length > 0) {
+              safeGames.push(vacGames[0]);
+            }
+            
+            gamesToBoost = safeGames;
+          }
+        }
+      }
+      
       // Always boost the games in the background
-      client.gamesPlayed(account.games);
-      logger.info(`Boosting ${account.games.length} games for ${account.username}: ${account.games.join(', ')}`);
+      client.gamesPlayed(gamesToBoost);
+      logger.info(`Boosting ${gamesToBoost.length} games for ${account.username}: ${gamesToBoost.join(', ')}`);
       
       // Set custom playing status if enabled
       if (useCustomStatus && account.customPlayingStatus) {
@@ -200,9 +230,16 @@ function processAccounts() {
                             (config.settings && config.settings.defaultAutoReply) || 
                             "I'm currently AFK. This is an automated response.";
     
-    // Send auto-reply
-    client.chat.sendFriendMessage(steamID, autoReplyMessage);
-    logger.info(`Auto-replied to ${senderSteamID} from ${account.username} with: ${autoReplyMessage}`);
+    // Get delay from config or use default (3 seconds)
+    const replyDelay = (account.autoReplyDelay || 
+                       (config.settings && config.settings.autoReplyDelay) || 
+                       3) * 1000; // Convert to milliseconds
+    
+    // Send auto-reply with delay
+    setTimeout(() => {
+      client.chat.sendFriendMessage(steamID, autoReplyMessage);
+      logger.info(`Auto-replied to ${senderSteamID} from ${account.username} with: ${autoReplyMessage} (after ${replyDelay/1000}s delay)`);
+    }, replyDelay);
   });
   
   client.on('error', (err) => {
