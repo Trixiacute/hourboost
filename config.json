@@ -1,0 +1,28 @@
+{
+  "accounts": [
+    {
+      "username": "akun_pertama",
+      "password": "password_akun_pertama",
+      "games": [730, 244210, 570],
+      "status": "online",
+      "autoReply": "Hello, I'm busy right now. Please leave a message and I'll get back to you soon. 🖤",
+      "customPlayingStatus": "Jung Eunbi & Rei Supremacy!",
+      "enabled": true
+    },
+    {
+      "username": "akun_kedua",
+      "password": "password_akun_kedua",
+      "games": [730, 440, 570],
+      "status": "online",
+      "autoReply": "Saya sedang AFK. Mohon tinggalkan pesan.",
+      "customPlayingStatus": "🎮 Gaming Time 🎮",
+      "enabled": false
+    }
+  ],
+  "settings": {
+    "logLevel": "info",
+    "playingMessage": "Steam Hour Booster",
+    "defaultAutoReply": "Saya sedang tidak di tempat. Pesan Anda akan saya balas nanti.",
+    "customPlayingStatus": "🎮 Gaming Time 🎮"
+  }
+} 

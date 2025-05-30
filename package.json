@@ -1,0 +1,19 @@
+{
+  "name": "steam-hour-booster",
+  "version": "1.0.0",
+  "description": "A Steam hour boosting application for Pterodactyl",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "postinstall": "npm install steam-user winston"
+  },
+  "dependencies": {
+    "steam-user": "^4.29.1",
+    "winston": "^3.10.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+} 

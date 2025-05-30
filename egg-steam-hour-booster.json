@@ -1,0 +1,31 @@
+{
+  "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2023-01-01T00:00:00+00:00",
+  "name": "Steam Hour Booster",
+  "author": "Anonymous",
+  "description": "A Node.js application to boost your Steam account's hours in selected games.",
+  "features": null,
+  "docker_images": {
+    "node:16": "node:16"
+  },
+  "file_denylist": [],
+  "startup": "npm install steam-user winston --no-fund --no-audit && node index.js",
+  "config": {
+    "files": "{}",
+    "startup": "{\r\n    \"done\": \"Steam Hour Booster started\"\r\n}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "npm install steam-user winston --no-fund --no-audit",
+      "container": "node:16",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": []
+} 

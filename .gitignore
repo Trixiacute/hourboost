@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+
+# Steam guard files
+*.sentry
+Steamguard-*
+
+# Config file with credentials
+# Uncomment if you don't want to commit your config
+# config.json
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo 
