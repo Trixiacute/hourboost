@@ -45,10 +45,34 @@ if (config.settings && config.settings.logLevel) {
 const clients = [];
 const pendingAuthClients = [];
 let activeAccounts = [];
+let useCustomStatus = true; // Default to use custom status
+
+// Ask user if they want to use custom playing status
+function askForCustomStatusOption() {
+  console.log("\n=== Steam Hour Booster ===");
+  console.log("Apakah Anda ingin menggunakan custom playing status?");
+  console.log("1. Ya, gunakan custom playing status (\"Jung Eunbi & Rei Supremacy!\" dll)");
+  console.log("2. Tidak, tampilkan nama game asli");
+  
+  rl.question("Masukkan pilihan Anda (1/2): ", (answer) => {
+    if (answer.trim() === "1") {
+      useCustomStatus = true;
+      logger.info("Menggunakan custom playing status");
+    } else if (answer.trim() === "2") {
+      useCustomStatus = false;
+      logger.info("Menggunakan nama game asli");
+    } else {
+      logger.info("Pilihan tidak valid, menggunakan default: custom playing status");
+    }
+    
+    // Continue to account selection
+    askForAccountSelection();
+  });
+}
 
 // Ask user which accounts to boost
 function askForAccountSelection() {
-  console.log("\n=== Steam Hour Booster ===");
+  console.log("\n=== Pilih Akun ===");
   console.log("Pilih akun yang ingin di-boost:");
   
   config.accounts.forEach((account, index) => {
@@ -131,29 +155,29 @@ function processAccounts() {
     
     client.setPersona(personaState);
     
-    // Start playing games with custom status
+    // Start playing games with custom status (if enabled)
     if (account.games && Array.isArray(account.games) && account.games.length > 0) {
-      // Check if custom playing status is defined for this account
-      if (account.customPlayingStatus) {
-        // Use custom playing status
+      // Always boost the games in the background
+      client.gamesPlayed(account.games);
+      logger.info(`Boosting ${account.games.length} games for ${account.username}: ${account.games.join(', ')}`);
+      
+      // Set custom playing status if enabled
+      if (useCustomStatus && account.customPlayingStatus) {
         logger.info(`Setting custom playing status for ${account.username}: ${account.customPlayingStatus}`);
-        client.gamesPlayed(account.customPlayingStatus);
-      } else if (config.settings && config.settings.customPlayingStatus) {
-        // Use global custom playing status
+        // Set custom rich presence to display the custom status while still boosting games
+        client.setPersona(personaState, account.customPlayingStatus);
+      } else if (useCustomStatus && config.settings && config.settings.customPlayingStatus) {
         logger.info(`Setting global custom playing status for ${account.username}: ${config.settings.customPlayingStatus}`);
-        client.gamesPlayed(config.settings.customPlayingStatus);
-      } else {
-        // Fallback to normal game boosting
-        logger.info(`Boosting ${account.games.length} games for ${account.username}: ${account.games.join(', ')}`);
-        client.gamesPlayed(account.games);
+        // Set custom rich presence to display the custom status while still boosting games
+        client.setPersona(personaState, config.settings.customPlayingStatus);
       }
     } else {
       logger.warn(`No games specified for ${account.username}`);
       
       // Set custom playing message even if no games are specified
-      if (account.customPlayingStatus) {
+      if (useCustomStatus && account.customPlayingStatus) {
         client.gamesPlayed(account.customPlayingStatus);
-      } else if (config.settings && config.settings.customPlayingStatus) {
+      } else if (useCustomStatus && config.settings && config.settings.customPlayingStatus) {
         client.gamesPlayed(config.settings.customPlayingStatus);
       } else if (config.settings && config.settings.playingMessage) {
         client.gamesPlayed(config.settings.playingMessage);
@@ -201,8 +225,8 @@ function processAccounts() {
   });
 }
 
-// Start the application by asking which accounts to boost
-askForAccountSelection();
+// Start the application by asking for custom status preference
+askForCustomStatusOption();
 
 // Handle process termination
 process.on('SIGINT', () => {
